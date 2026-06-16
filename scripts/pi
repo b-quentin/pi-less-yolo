@@ -3,6 +3,7 @@ set -euo pipefail
 
 CURRENT_DIR="$(pwd -P)"
 HOME_DIR="$(cd "$HOME" && pwd -P)"
+PROJECT_NAME="$(basename "$CURRENT_DIR")"
 GIT_NAME="${GIT_AUTHOR_NAME:-${GIT_COMMITTER_NAME:-$(git config --get user.name 2>/dev/null || true)}}"
 GIT_EMAIL="${GIT_AUTHOR_EMAIL:-${GIT_COMMITTER_EMAIL:-$(git config --get user.email 2>/dev/null || true)}}"
 ENV_FILE="$HOME/.config/picapsule/.env"
@@ -33,12 +34,12 @@ docker run -it --rm \
   --cap-drop=ALL \
   --security-opt no-new-privileges:true \
   --env-file "$HOME/.config/picapsule/.env" \
-  -v "$CURRENT_DIR:/workspace" \
+  -v "$CURRENT_DIR:/workspace/$PROJECT_NAME" \
   -v "$HOME/.pi:/home/piuser/.pi" \
   $SSH_AUTH_SOCK_ARG \
   -e "GIT_AUTHOR_NAME=$GIT_NAME" \
   -e "GIT_AUTHOR_EMAIL=$GIT_EMAIL" \
   -e "GIT_COMMITTER_NAME=$GIT_NAME" \
   -e "GIT_COMMITTER_EMAIL=$GIT_EMAIL" \
-  -w /workspace \
+  -w /workspace/$PROJECT_NAME \
   picapsule "$@"
