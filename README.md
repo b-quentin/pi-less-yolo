@@ -19,11 +19,12 @@ The wrapper runs `pi` inside a hardened container and mounts:
 - your local `~/.pi` directory into the container
 - your environment file from `~/.config/picapsule/.env`
 
-It also forwards your Git author/committer identity so commits made from inside the container keep the expected name and email.
+It also forwards your Git author/committer identity, and the container entrypoint maps it to Git `user.name` / `user.email` so commits made from inside the container keep the expected name and email.
 
 ## Repository layout
 
 - `Dockerfile` – builds the `picapsule` image
+- `docker-entrypoint.sh` – initializes Git identity, then launches `pi`
 - `scripts/pi` – wrapper used to launch `pi` in Docker
 - `Makefile` – helper commands
 - `tests/scripts_pi_test.sh` – wrapper test

@@ -6,3 +6,4 @@ build:
 
 test:
 	bash tests/scripts_pi_test.sh
+	bash tests/docker_entrypoint_test.sh

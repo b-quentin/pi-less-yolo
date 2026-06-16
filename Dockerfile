@@ -21,6 +21,9 @@ RUN useradd -m -u 1000 -s /bin/bash piuser \
     && mkdir -p /workspace \
     && chown piuser:piuser /workspace
 
+COPY --chown=piuser:piuser docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 USER piuser
 ENV HOME=/home/piuser
 ARG NODE_VERSION=24
@@ -35,4 +38,4 @@ RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/in
 
 WORKDIR /workspace
 
-ENTRYPOINT ["/home/piuser/.bun/bin/pi"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
