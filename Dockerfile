@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     make \
     xz-utils \
+    fd-find \
+    ripgrep \
+    && ln -s /usr/bin/fdfind /usr/bin/fd \
     && rm -rf /var/lib/apt/lists/*
 
 ARG BUN_VERSION=1.3.14
