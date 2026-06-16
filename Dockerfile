@@ -22,9 +22,14 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x64") && \
     && chmod +x /usr/local/bin/bun \
     && rm -rf /tmp/bun*
 
-RUN useradd -m -u 1000 -s /bin/bash piuser \
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN if ! getent group ${USER_GID} > /dev/null 2>&1; then \
+        groupadd -g ${USER_GID} piuser; \
+    fi \
+    && useradd -m -u ${USER_UID} -g ${USER_GID} -s /bin/bash piuser \
     && mkdir -p /workspace \
-    && chown piuser:piuser /workspace
+    && chown ${USER_UID}:${USER_GID} /workspace
 
 COPY --chown=piuser:piuser docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh

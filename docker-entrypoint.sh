@@ -41,7 +41,7 @@ GIT_NAME="${GIT_AUTHOR_NAME:-${GIT_COMMITTER_NAME:-}}"
 GIT_EMAIL="${GIT_AUTHOR_EMAIL:-${GIT_COMMITTER_EMAIL:-}}"
 
 # Only configure Pi if we're actually running it
-if [ "$1" != "bash" ] && [ "$1" != "sh" ] && [ "$1" != "node" ]; then
+if [ $# -eq 0 ] || ([ "$1" != "bash" ] && [ "$1" != "sh" ] && [ "$1" != "node" ]); then
   ensure_pi_agent_settings_symlink
 
   if [ -n "$GIT_NAME" ]; then
@@ -52,7 +52,11 @@ if [ "$1" != "bash" ] && [ "$1" != "sh" ] && [ "$1" != "node" ]; then
     git config --global user.email "$GIT_EMAIL"
   fi
 
-  exec "${PI_BIN:-pi}" "$@"
+  if [ $# -eq 0 ]; then
+    exec "${PI_BIN:-pi}"
+  else
+    exec "${PI_BIN:-pi}" "$@"
+  fi
 else
   # Pass through to requested shell/node
   exec "$@"
